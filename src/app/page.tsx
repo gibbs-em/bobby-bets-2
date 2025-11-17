@@ -26,7 +26,7 @@ export default async function HomePage() {
       <div className="lg:grid lg:grid-cols-3 lg:gap-8">
         {/* Main Content */}
         <div className="lg:col-span-2">
-          <div className="mb-12">
+          <div className="mb-4">
             <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900" style={{ fontFamily: "var(--font-oswald)" }}>League Standings</h2>
             <p className="text-gray-600">Track manager performance across all leagues</p>
           </div>
@@ -37,6 +37,7 @@ export default async function HomePage() {
         <div className="mt-12 lg:mt-0 space-y-8">
           <PostList 
             title="Theckston's Thoughts" 
+            description="Donny spills the tea"
             posts={theckstonsThoughts}
           />
           <PostList 

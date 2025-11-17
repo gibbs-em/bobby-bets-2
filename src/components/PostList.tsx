@@ -3,20 +3,24 @@ import { type SanityDocument } from "next-sanity";
 
 interface PostListProps {
   title: string;
+  description?: string;
   posts: SanityDocument[];
   className?: string;
 }
 
-export default function PostList({ title, posts, className = "" }: PostListProps) {
+export default function PostList({ title, description, posts, className = "" }: PostListProps) {
   if (posts.length === 0) {
     return null;
   }
 
   return (
     <div className={className}>
-      <h3 className="text-2xl font-bold mb-4 text-purple-600" style={{ fontFamily: "var(--font-oswald)" }}>
+      <div className="flex"> 
+      <h3 className="text-2xl font-bold mb-1 text-purple-600" style={{ fontFamily: "var(--font-oswald)" }}>
         {title}
       </h3>
+      </div>
+      <p className="mb-2 italic text-gray-600">{description}</p>
       <div className="space-y-3">
         {posts.map((post) => (
           <Link
