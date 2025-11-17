@@ -9,6 +9,8 @@ export default function SiteNav() {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/blog", label: "Blog" },
+    { href: "/about", label: "About" },
+    { href: "/records", label: "Hall of Record" },
   ];
 
   return (

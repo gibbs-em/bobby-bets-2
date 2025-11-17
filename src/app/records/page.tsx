@@ -3,12 +3,12 @@ import PageContent from "@/components/PageContent";
 import { notFound } from "next/navigation";
 
 export const metadata = {
-  title: "About - Bobby Bets",
-  description: "Learn more about Bobby Bets",
+  title: "Hall of Record - Bobby Bets",
+  description: "Hall of Record for Bobby Bets",
 };
 
-export default async function AboutPage() {
-  const page = await fetchPageBySlug("about");
+export default async function RecordsPage() {
+  const page = await fetchPageBySlug("records");
 
   if (!page) {
     notFound();
@@ -16,3 +16,4 @@ export default async function AboutPage() {
 
   return <PageContent page={page} />;
 }
+

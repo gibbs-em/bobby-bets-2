@@ -32,7 +32,7 @@ export default async function HomePage() {
   return (
     <main className="container mx-auto min-h-screen max-w-6xl px-8 py-8">
       <div className="mb-12">
-        <h2 className="text-4xl font-bold mb-2 text-purple-600" style={{ fontFamily: "var(--font-oswald)" }}>League Standings</h2>
+        <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900" style={{ fontFamily: "var(--font-oswald)" }}>League Standings</h2>
         <p className="text-gray-600">Track manager performance across all leagues</p>
       </div>
       <LeagueStandings leagues={leaguesData} />
