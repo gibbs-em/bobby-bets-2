@@ -18,7 +18,7 @@ const LEAGUES = [
   { code: 698097, name: "Vanarama" },
 ];
 
-export default async function IndexPage() {
+export default async function HomePage() {
   const [posts, ...leagueStandings] = await Promise.all([
     client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options),
     ...LEAGUES.map((league) => fetchStandings(league.code)),
@@ -32,24 +32,24 @@ export default async function IndexPage() {
   return (
     <main className="container mx-auto min-h-screen max-w-6xl px-8 py-8">
       <div className="mb-12">
-        <h2 className="text-4xl font-bold mb-2 text-[#10b981]">Fantasy League Standings</h2>
-        <p className="text-[#9ca3af]">Track your league performance across all competitions</p>
+        <h2 className="text-4xl font-bold mb-2 text-purple-600" style={{ fontFamily: "var(--font-oswald)" }}>League Standings</h2>
+        <p className="text-gray-600">Track manager performance across all leagues</p>
       </div>
       <LeagueStandings leagues={leaguesData} />
 
       <div className="mt-16">
-        <h2 className="text-4xl font-bold mb-6 text-[#10b981]">Latest Posts</h2>
+        <h2 className="text-4xl font-bold mb-6 text-purple-600" style={{ fontFamily: "var(--font-oswald)" }}>Latest Posts</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <Link
               href={`/${post.slug.current}`}
               key={post._id}
-              className="block p-6 rounded-lg bg-[#1a2e1f] border border-[#374151] hover:border-[#10b981] hover:shadow-lg hover:shadow-[#10b981]/20 transition-all duration-200 group"
+              className="block p-6 rounded-lg bg-gray-50 border border-gray-200 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-100 transition-all duration-200 group"
             >
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-[#10b981] transition-colors">
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 group-hover:text-purple-600 transition-colors" style={{ fontFamily: "var(--font-oswald)" }}>
                 {post.title}
               </h3>
-              <p className="text-sm text-[#9ca3af]">
+              <p className="text-sm text-gray-600">
                 {new Date(post.publishedAt).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",

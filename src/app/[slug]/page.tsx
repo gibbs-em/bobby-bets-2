@@ -3,6 +3,7 @@ import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "@/sanity/client";
 import Link from "next/link";
+import Author from "@/components/Author";
 
 const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]`;
 
@@ -25,24 +26,34 @@ export default async function PostPage({
     : null;
 
   return (
-    <main className="container mx-auto min-h-screen max-w-3xl p-8 flex flex-col gap-4">
-      <Link href="/" className="hover:underline">
-        ← Back to posts
+    <main className="container mx-auto min-h-screen max-w-3xl p-8">
+      <Link href="/blog" className="hover:underline text-purple-600 hover:text-green-600 transition-colors mb-6 inline-block">
+        ← Back to Blog
       </Link>
-      {postImageUrl && (
-        <img
-          src={postImageUrl}
-          alt={post.title}
-          className="aspect-video rounded-xl"
-          width="550"
-          height="310"
-        />
-      )}
-      <h1 className="text-4xl font-bold mb-8">{post.title}</h1>
-      <div className="prose">
-        <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p>
-        {Array.isArray(post.body) && <PortableText value={post.body} />}
-      </div>
+      
+      <article className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+        {postImageUrl && (
+          <img
+            src={postImageUrl}
+            alt={post.title}
+            className="w-full aspect-video object-cover"
+            width="550"
+            height="310"
+          />
+        )}
+        
+        <div className="p-8 md:p-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900" style={{ fontFamily: "var(--font-oswald)" }}>
+            {post.title}
+          </h1>
+          
+          <Author publishedAt={post.publishedAt} />
+          
+          <div className="prose prose-gray prose-lg max-w-none mt-8">
+            {Array.isArray(post.body) && <PortableText value={post.body} />}
+          </div>
+        </div>
+      </article>
     </main>
   );
 }
