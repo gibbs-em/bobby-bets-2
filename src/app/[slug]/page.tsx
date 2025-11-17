@@ -5,7 +5,10 @@ import { client } from "@/sanity/client";
 import Link from "next/link";
 import Author from "@/components/Author";
 
-const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]`;
+const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]{
+  ...,
+  "author": author->{name, image}
+}`;
 
 const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
@@ -23,6 +26,10 @@ export default async function PostPage({
   const post = await client.fetch<SanityDocument>(POST_QUERY, await params, options);
   const postImageUrl = post.image
     ? urlFor(post.image)?.width(550).height(310).url()
+    : null;
+  
+  const authorImageUrl = post.author?.image
+    ? urlFor(post.author.image)?.width(48).height(48).url()
     : null;
 
   return (
@@ -47,7 +54,13 @@ export default async function PostPage({
             {post.title}
           </h1>
           
-          <Author publishedAt={post.publishedAt} />
+          <Author 
+            publishedAt={post.publishedAt}
+            author={post.author ? {
+              name: post.author.name,
+              imageUrl: authorImageUrl || undefined
+            } : undefined}
+          />
           
           <div className="prose prose-gray prose-lg max-w-none mt-8">
             {Array.isArray(post.body) && <PortableText value={post.body} />}

@@ -1,16 +1,22 @@
 import Image from "next/image";
 
+interface AuthorData {
+  name: string;
+  imageUrl?: string;
+}
+
 interface AuthorProps {
-  name?: string;
+  author?: AuthorData;
   publishedAt: string;
-  avatarUrl?: string;
 }
 
 export default function Author({ 
-  name = "BobbyBets Team", 
-  publishedAt,
-  avatarUrl = "/logo_BG.png" 
+  author,
+  publishedAt
 }: AuthorProps) {
+  const name = author?.name || "BobbyBets Team";
+  const avatarUrl = author?.imageUrl || "/logo_BG.png";
+  
   const formattedDate = new Date(publishedAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
