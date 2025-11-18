@@ -2,6 +2,7 @@ import { PortableText, type SanityDocument } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "@/sanity/client";
+import AccordionBlock from "@/components/Accordion";
 
 const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
@@ -30,16 +31,15 @@ export default function PageContent({ page }: PageContentProps) {
             height="675"
           />
         )}
-        
+
         <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900" style={{ fontFamily: "var(--font-oswald)" }}>
           {page.title}
         </h2>
-        
+
         <div className="prose prose-gray prose-lg max-w-none">
-          {Array.isArray(page.body) && <PortableText value={page.body} />}
+          {Array.isArray(page.body) && <PortableText value={page.body} components={{ types: { accordionBlock: (props) => <AccordionBlock items={props.value.items} /> }}} />}
         </div>
       </article>
     </main>
   );
 }
-
