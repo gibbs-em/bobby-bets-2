@@ -13,7 +13,9 @@ export default function AccordionBlock({ items }: AccordionProps) {
         {items.map((item, index) => (
             <AccordionItem key={index} value={item.title}>
                 <AccordionTrigger>{item.title}</AccordionTrigger>
-                <AccordionContent>{item.content}</AccordionContent>
+                <AccordionContent>
+                  <div className="whitespace-pre-line">{item.content}</div>
+                </AccordionContent>
             </AccordionItem>
         ))}
     </Accordion>
