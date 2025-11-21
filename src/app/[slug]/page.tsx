@@ -63,7 +63,21 @@ export default async function PostPage({
           />
           
           <div className="prose prose-gray prose-lg max-w-none mt-8">
-            {Array.isArray(post.body) && <PortableText value={post.body} />}
+            {Array.isArray(post.body) && (
+              <PortableText 
+                value={post.body}
+                components={{
+                  block: {
+                    normal: ({children}) => <p className="mb-4">{children}</p>,
+                  },
+                  marks: {
+                    strong: ({children}) => <strong className="font-bold">{children}</strong>,
+                    em: ({children}) => <em className="italic">{children}</em>,
+                    code: ({children}) => <code className="bg-gray-100 px-1 py-0.5 rounded text-sm">{children}</code>,
+                  },
+                }}
+              />
+            )}
           </div>
         </div>
       </article>

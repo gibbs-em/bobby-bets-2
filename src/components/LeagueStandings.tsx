@@ -1,11 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { type StandingResult } from "@/lib/fpl";
+
+interface Zone {
+  start: number;
+  end: number;
+  color: string;
+  label: string;
+}
 
 interface LeagueData {
   name: string;
   standings: StandingResult[];
+  zones: Zone[];
 }
 
 interface LeagueStandingsProps {
@@ -16,6 +24,18 @@ export default function LeagueStandings({ leagues }: LeagueStandingsProps) {
   const [activeTab, setActiveTab] = useState(0);
 
   const activeLeague = leagues[activeTab];
+
+  const getZoneForRank = (rank: number, totalTeams: number, zones: Zone[]) => {
+    for (const zone of zones) {
+      const startRank = zone.start > 0 ? zone.start : totalTeams + zone.start + 1;
+      const endRank = zone.end > 0 ? zone.end : totalTeams + zone.end + 1;
+      
+      if (rank >= startRank && rank <= endRank) {
+        return { ...zone, startRank, endRank };
+      }
+    }
+    return null;
+  };
 
   if (!activeLeague || activeLeague.standings.length === 0) {
     return (
@@ -53,33 +73,64 @@ export default function LeagueStandings({ leagues }: LeagueStandingsProps) {
               <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Rank</th>
               <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Team</th>
               <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Manager</th>
+              <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Points</th>
             </tr>
           </thead>
           <tbody>
-            {activeLeague.standings.map((standing, index) => (
-              <tr
-                key={standing.id}
-                className={`border-b border-gray-200 transition-colors ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                } hover:bg-purple-50`}
-              >
-                <td className="py-4 px-6 font-bold">
-                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full font-bold ${
-                    standing.rank === 1
-                      ? "bg-linear-to-br from-yellow-400 to-yellow-500 text-gray-900"
-                      : standing.rank === 2
-                      ? "bg-gray-300 text-gray-900"
-                      : standing.rank === 3
-                      ? "bg-amber-600 text-white"
-                      : "bg-gray-200 text-gray-700"
-                  }`}>
-                    {standing.rank}
-                  </span>
-                </td>
-                <td className="py-4 px-6 font-semibold text-gray-900">{standing.entry_name}</td>
-                <td className="py-4 px-6 text-gray-600">{standing.player_name}</td>
-              </tr>
-            ))}
+            {activeLeague.standings.map((standing, index) => {
+              const totalTeams = activeLeague.standings.length;
+              const currentZone = getZoneForRank(standing.rank, totalTeams, activeLeague.zones);
+              const prevStanding = index > 0 ? activeLeague.standings[index - 1] : null;
+              const prevZone = prevStanding ? getZoneForRank(prevStanding.rank, totalTeams, activeLeague.zones) : null;
+              
+              const isZoneStart = currentZone && (!prevZone || prevZone.label !== currentZone.label);
+              const isZoneEnd = currentZone && (
+                index === activeLeague.standings.length - 1 || 
+                standing.rank === currentZone.endRank
+              );
+              
+              const isRelegationZone = currentZone?.label.toLowerCase().includes('relegation');
+              
+              return (
+                <Fragment key={standing.id}>
+                  {isZoneStart && (
+                    <tr>
+                      <td colSpan={4} className={`py-2 px-6 text-xs uppercase tracking-wide font-bold ${
+                        isRelegationZone ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                      }`}>
+                        {currentZone.label}
+                      </td>
+                    </tr>
+                  )}
+                  <tr
+                    className={`border-b border-gray-200 transition-colors ${
+                      currentZone ? currentZone.color : (index % 2 === 0 ? "bg-white" : "bg-gray-50")
+                    } ${
+                      isZoneStart 
+                        ? isRelegationZone 
+                          ? "border-t-2 border-dashed border-red-100" 
+                          : "border-t-2 border-dashed border-green-100"
+                        : ""
+                    } ${
+                      isZoneEnd 
+                        ? isRelegationZone 
+                          ? "border-b-2 border-dashed border-red-100" 
+                          : "border-b-2 border-dashed border-green-100"
+                        : ""
+                    }`}
+                  >
+                    <td className="py-4 px-6 font-bold">
+                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full font-bold bg-gray-200 text-gray-700">
+                        {standing.rank}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 font-semibold text-gray-900">{standing.entry_name}</td>
+                    <td className="py-4 px-6 text-gray-600">{standing.player_name}</td>
+                    <td className="py-4 px-6 font-bold text-gray-900">{standing.total}</td>
+                  </tr>
+                </Fragment>
+              );
+            })}
           </tbody>
         </table>
       </div>

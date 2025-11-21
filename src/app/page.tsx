@@ -4,9 +4,31 @@ import LeagueStandings from "@/components/LeagueStandings";
 import PostList from "@/components/PostList";
 
 const LEAGUES = [
-  { code: 668619, name: "PPL" },
-  { code: 667900, name: "Segunda" },
-  { code: 698097, name: "Vanarama" },
+  { 
+    code: 668619, 
+    name: "PPL",
+    zones: [
+      { start: 1, end: 4, color: 'bg-green-50', label: 'Playoffs' },
+      { start: -3, end: -1, color: 'bg-red-50', label: 'Relegation Zone' }
+    ]
+  },
+  { 
+    code: 667900, 
+    name: "Segunda",
+    zones: [
+      { start: 1, end: 1, color: 'bg-green-100', label: 'Promotion Zone' },
+      { start: 2, end: 5, color: 'bg-green-50', label: 'Playoff Zone' },
+      { start: -3, end: -1, color: 'bg-red-50', label: 'Relegation Zone' }
+    ]
+  },
+  { 
+    code: 698097, 
+    name: "Vanarama",
+    zones: [
+      { start: 1, end: 3, color: 'bg-green-50', label: 'Promotion Zone' },
+      { start: -2, end: -1, color: 'bg-red-50', label: 'Relegation Zone' }
+    ]
+  },
 ];
 
 export default async function HomePage() {
@@ -19,6 +41,7 @@ export default async function HomePage() {
   const leaguesData = LEAGUES.map((league, index) => ({
     name: league.name,
     standings: leagueStandings[index],
+    zones: league.zones,
   }));
 
   return (

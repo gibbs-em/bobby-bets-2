@@ -37,7 +37,24 @@ export default function PageContent({ page }: PageContentProps) {
         </h2>
 
         <div className="prose prose-gray prose-lg max-w-none">
-          {Array.isArray(page.body) && <PortableText value={page.body} components={{ types: { accordionBlock: (props) => <AccordionBlock items={props.value.items} /> }}} />}
+          {Array.isArray(page.body) && (
+            <PortableText 
+              value={page.body} 
+              components={{ 
+                types: { 
+                  accordionBlock: (props) => <AccordionBlock items={props.value.items} /> 
+                },
+                block: {
+                  normal: ({children}) => <p className="mb-4">{children}</p>,
+                },
+                marks: {
+                  strong: ({children}) => <strong className="font-bold">{children}</strong>,
+                  em: ({children}) => <em className="italic">{children}</em>,
+                  code: ({children}) => <code className="bg-gray-100 px-1 py-0.5 rounded text-sm">{children}</code>,
+                },
+              }} 
+            />
+          )}
         </div>
       </article>
     </main>
