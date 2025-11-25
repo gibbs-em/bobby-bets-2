@@ -20,22 +20,22 @@ interface LeagueStandingsProps {
   leagues: LeagueData[];
 }
 
+export const getZoneForRank = (rank: number, totalTeams: number, zones: Zone[]) => {
+  for (const zone of zones) {
+    const startRank = zone.start > 0 ? zone.start : totalTeams + zone.start + 1;
+    const endRank = zone.end > 0 ? zone.end : totalTeams + zone.end + 1;
+    
+    if (rank >= startRank && rank <= endRank) {
+      return { ...zone, startRank, endRank };
+    }
+  }
+  return null;
+}
+
 export default function LeagueStandings({ leagues }: LeagueStandingsProps) {
   const [activeTab, setActiveTab] = useState(0);
 
   const activeLeague = leagues[activeTab];
-
-  const getZoneForRank = (rank: number, totalTeams: number, zones: Zone[]) => {
-    for (const zone of zones) {
-      const startRank = zone.start > 0 ? zone.start : totalTeams + zone.start + 1;
-      const endRank = zone.end > 0 ? zone.end : totalTeams + zone.end + 1;
-      
-      if (rank >= startRank && rank <= endRank) {
-        return { ...zone, startRank, endRank };
-      }
-    }
-    return null;
-  };
 
   if (!activeLeague || activeLeague.standings.length === 0) {
     return (
