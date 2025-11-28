@@ -4,6 +4,7 @@ import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "@/sanity/client";
 import Link from "next/link";
 import Author from "@/components/Author";
+import { Metadata } from "next";
 
 const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]{
   ...,
@@ -17,6 +18,88 @@ const urlFor = (source: SanityImageSource) =>
     : null;
 
 const options = { next: { revalidate: 30 } };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractTextFromBlocks(blocks: any[]): string {
+  if (!Array.isArray(blocks)) return "";
+  
+  return blocks
+    .map((block) => {
+      if (block._type === "block" && block.children) {
+        return block.children
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .map((child: any) => (typeof child === "string" ? child : child.text || ""))
+          .join("");
+      }
+      return "";
+    })
+    .join(" ")
+    .trim();
+}
+
+const siteUrl = process.env.SITE_URL || "https://bobbybets.org";
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> },
+): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await client.fetch<SanityDocument>(POST_QUERY, { slug }, options);
+  
+  if (!post) {
+    return {
+      title: "Post Not Found - Bobby Bets",
+    };
+  }
+
+  const postUrl = `${siteUrl}/${slug}`;
+  
+  // Generate description from excerpt or body
+  let description = post.excerpt || "";
+  if (!description && Array.isArray(post.body)) {
+    const bodyText = extractTextFromBlocks(post.body);
+    description = bodyText.substring(0, 160).trim();
+    if (bodyText.length > 160) {
+      description += "...";
+    }
+  }
+  if (!description) {
+    description = `Read ${post.title} on Bobby Bets`;
+  }
+
+  // Generate OG image URL (1200x630 is the recommended OG image size)
+  const ogImageUrl = post.image
+    ? urlFor(post.image)?.width(1200).height(630).url() || null
+    : null;
+
+  const metadata: Metadata = {
+    title: `${post.title} - Bobby Bets`,
+    description,
+    openGraph: {
+      title: post.title,
+      description,
+      type: "article",
+      url: postUrl,
+      publishedTime: post.publishedAt,
+      ...(ogImageUrl
+        ? {
+            images: [
+              {
+                url: ogImageUrl,
+                width: 1200,
+                height: 630,
+                alt: post.title,
+              },
+            ],
+          }
+        : {}),
+      ...(post.author?.name && {
+        authors: [post.author.name],
+      }),
+    },
+  };
+
+  return metadata;
+}
 
 export default async function PostPage({
   params,

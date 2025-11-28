@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { type SanityDocument } from "next-sanity";
 import { client } from "@/sanity/client";
+import { Metadata } from "next";
 
 const POSTS_QUERY = `*[
   _type == "post"
@@ -9,10 +10,22 @@ const POSTS_QUERY = `*[
 
 const options = { next: { revalidate: 30 } };
 
-export const metadata = {
-  title: "Blog - Bobby Bets",
-  description: "All the latest news, updates, and analysis from Bobby Bets",
-};
+const siteUrl = process.env.SITE_URL || "https://bobbybets.org";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const blogUrl = `${siteUrl}/blog`;
+  
+  return {
+    title: "Blog - Bobby Bets",
+    description: "All the latest news, updates, and analysis from Bobby Bets",
+    openGraph: {
+      title: "Blog - Bobby Bets",
+      description: "All the latest news, updates, and analysis from Bobby Bets",
+      type: "website",
+      url: blogUrl,
+    },
+  };
+}
 
 export default async function BlogPage() {
   const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
