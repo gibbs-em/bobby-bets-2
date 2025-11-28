@@ -19,9 +19,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bobby Bets - Fantasy Football League Standings",
+  title: "Bobby Bets",
   description:
-    "Track your fantasy football league standings and compete with friends",
+    "Your unofficial source for all PPL, Segunda and Vanarama news.",
+  icons: {
+    icon: "/logo_noBG.png",
+  },
 };
 
 export default function RootLayout({
