@@ -73,6 +73,7 @@ export default function LeagueStandings({ leagues }: LeagueStandingsProps) {
               <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Rank</th>
               <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Team</th>
               <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Manager</th>
+              <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Score</th>
               <th className="text-left py-4 px-6 font-bold text-purple-600 uppercase text-sm tracking-wide" style={{ fontFamily: "var(--font-oswald)" }}>Points</th>
             </tr>
           </thead>
@@ -95,7 +96,7 @@ export default function LeagueStandings({ leagues }: LeagueStandingsProps) {
                 <Fragment key={standing.id}>
                   {isZoneStart && (
                     <tr>
-                      <td colSpan={4} className={`py-2 px-6 text-xs uppercase tracking-wide font-bold ${
+                      <td colSpan={5} className={`py-2 px-6 text-xs uppercase tracking-wide font-bold ${
                         isRelegationZone ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
                       }`}>
                         {currentZone.label}
@@ -126,6 +127,7 @@ export default function LeagueStandings({ leagues }: LeagueStandingsProps) {
                     </td>
                     <td className="py-4 px-6 font-semibold text-gray-900">{standing.entry_name}</td>
                     <td className="py-4 px-6 text-gray-600">{standing.player_name}</td>
+                    <td className="py-4 px-6 font-bold text-gray-900">{standing.points_for}</td>
                     <td className="py-4 px-6 font-bold text-gray-900">{standing.total}</td>
                   </tr>
                 </Fragment>
