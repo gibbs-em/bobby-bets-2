@@ -20,6 +20,9 @@
 # production
 /build
 
+# generated Sanity import (npm run export-teams)
+teams.ndjson
+
 # misc
 .DS_Store
 *.pem

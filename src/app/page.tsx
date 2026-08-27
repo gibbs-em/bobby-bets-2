@@ -4,16 +4,16 @@ import LeagueStandings from "@/components/LeagueStandings";
 import PostList from "@/components/PostList";
 
 const LEAGUES = [
-  { 
-    code: 668619, 
+  {
+    code: 694268,
     name: "PPL",
     zones: [
       { start: 1, end: 4, color: 'bg-green-50', label: 'Playoffs' },
       { start: -3, end: -1, color: 'bg-red-50', label: 'Relegation Zone' }
     ]
   },
-  { 
-    code: 667900, 
+  {
+    code: 744202,
     name: "Segunda",
     zones: [
       { start: 1, end: 1, color: 'bg-green-100', label: 'Promotion Zone' },
@@ -21,8 +21,8 @@ const LEAGUES = [
       { start: -3, end: -1, color: 'bg-red-50', label: 'Relegation Zone' }
     ]
   },
-  { 
-    code: 698097, 
+  {
+    code: 805765,
     name: "Vanarama",
     zones: [
       { start: 1, end: 3, color: 'bg-green-50', label: 'Promotion Zone' },

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest"
+    "test": "vitest",
+    "export-teams": "node scripts/export-fpl-teams-for-sanity.mjs teams.ndjson"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
